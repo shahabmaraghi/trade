@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Multi-Symbol Scanner</title>
+    <style>
+      :root {
+        --bg: #000;
+        --card: #111;
+        --gold: #d4af37;
+        --text: #f8faff;
+        --green: #047857;
+        --red: #991b1b;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: Vazirmatn, sans-serif;
+        padding: 20px;
+      }
+      .container {
+        max-width: 900px;
+        margin: auto;
+      }
+      h1 {
+        text-align: center;
+        color: var(--gold);
+      }
+      .filters {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin: 30px 0;
+      }
+      input,
+      select {
+        padding: 12px;
+        background: #0d0d0d;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 8px;
+        color: var(--text);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th,
+      td {
+        padding: 15px;
+        text-align: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      }
+      th {
+        background: var(--card);
+      }
+      .bullish {
+        color: var(--green);
+      }
+      .bearish {
+        color: var(--red);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Multi-Symbol Scanner</h1>
+
+      <div class="filters">
+        <input
+          type="text"
+          id="symbols"
+          placeholder="سمبل‌ها (مثل BTCUSDT,ETHUSDT)"
+          value="BTCUSDT,ETHUSDT,BNBUSDT"
+        />
+        <select id="condition">
+          <option>بالای MA200</option>
+          <option>زیر MA200</option>
+          <option>RSI > 70</option>
+          <option>RSI < 30</option>
+        </select>
+        <button
+          onclick="scan()"
+          style="
+            background: var(--gold);
+            color: #000;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+          "
+        >
+          اسکن کن
+        </button>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>سمبل</th>
+            <th>قیمت</th>
+            <th>تغییر 24h</th>
+            <th>وضعیت</th>
+          </tr>
+        </thead>
+        <tbody id="results"></tbody>
+      </table>
+    </div>
+
+    <script>
+      async function scan() {
+        const symbols = document
+          .getElementById("symbols")
+          .value.split(",")
+          .map((s) => s.trim().toUpperCase());
+        const condition = document.getElementById("condition").value;
+        const results = document.getElementById("results");
+        results.innerHTML = '<tr><td colspan="4">در حال اسکن...</td></tr>';
+
+        let html = "";
+        for (let sym of symbols) {
+          try {
+            const res = await fetch(
+              `https://api.binance.com/api/v3/ticker/24hr?symbol=${sym}`
+            );
+            const data = await res.json();
+            const change = +data.priceChangePercent;
+            let status = "عادی";
+            let cls = "";
+
+            if (condition.includes("بالای") && change > 5) {
+              status = "بالاتر از میانگین";
+              cls = "bullish";
+            }
+            if (condition.includes("زیر") && change < -5) {
+              status = "پایین‌تر از میانگین";
+              cls = "bearish";
+            }
+            if (condition.includes("> 70") && change > 10) {
+              status = "اوربایت";
+              cls = "bullish";
+            }
+            if (condition.includes("< 30") && change < -10) {
+              status = "اورسولد";
+              cls = "bearish";
+            }
+
+            html += `<tr><td>${sym}</td><td>${parseFloat(
+              data.lastPrice
+            ).toFixed(2)}</td><td>${change.toFixed(
+              2
+            )}%</td><td class="${cls}">${status}</td></tr>`;
+          } catch (e) {
+            html += `<tr><td>${sym}</td><td colspan="3">داده در دسترس نیست</td></tr>`;
+          }
+        }
+        results.innerHTML = html;
+      }
+      scan();
+    </script>
+  </body>
+</html>

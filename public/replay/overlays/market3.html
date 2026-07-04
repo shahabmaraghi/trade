@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Session Timer</title>
+    <style>
+      :root {
+        --bg: #000;
+        --card: #111;
+        --gold: #d4af37;
+        --text: #f8faff;
+        --green: #047857;
+        --border: rgba(255, 255, 255, 0.06);
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: Vazirmatn, sans-serif;
+        padding: 20px;
+      }
+      .container {
+        max-width: 700px;
+        margin: auto;
+        text-align: center;
+      }
+      h1 {
+        color: var(--gold);
+        margin-bottom: 30px;
+      }
+      .sessions {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin: 30px 0;
+      }
+      .session {
+        background: var(--card);
+        padding: 20px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+      }
+      .session-name {
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+      }
+      .timer {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: var(--gold);
+      }
+      .killzone {
+        color: var(--green);
+        font-size: 1rem;
+        margin-top: 10px;
+      }
+      button {
+        background: var(--gold);
+        color: #000;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        margin: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Session Timer + Killzone</h1>
+
+      <div class="sessions">
+        <div class="session">
+          <div class="session-name">لندن</div>
+          <div class="timer" id="london">08:00 - 16:00</div>
+          <div class="killzone">Killzone: 08:00 - 10:00</div>
+        </div>
+        <div class="session">
+          <div class="session-name">نیویورک</div>
+          <div class="timer" id="ny">13:30 - 21:00</div>
+          <div class="killzone">Killzone: 13:30 - 15:30</div>
+        </div>
+        <div class="session">
+          <div class="session-name">توکیو</div>
+          <div class="timer" id="tokyo">00:00 - 09:00</div>
+          <div class="killzone">Killzone: 01:00 - 03:00</div>
+        </div>
+        <div class="session">
+          <div class="session-name">سیدنی</div>
+          <div class="timer" id="sydney">22:00 - 07:00</div>
+        </div>
+      </div>
+
+      <button onclick="notifyMe()">فعال کردن اعلان Killzone</button>
+    </div>
+
+    <script>
+      function updateTimers() {
+        const now = new Date();
+        const utc = now.getUTCHours() + now.getUTCMinutes() / 60;
+
+        document.querySelectorAll(".session").forEach((s) => {
+          s.style.borderColor = "var(--border)";
+          s.style.boxShadow = "none";
+        });
+
+        // London Killzone
+        if (utc >= 8 && utc <= 10) {
+          document.querySelector("#london").parentElement.style.borderColor =
+            "var(--green)";
+          document.querySelector("#london").parentElement.style.boxShadow =
+            "0 0 20px rgba(4,120,87,0.5)";
+        }
+        // NY Killzone
+        if (utc >= 13.5 && utc <= 15.5) {
+          document.querySelector("#ny").parentElement.style.borderColor =
+            "var(--green)";
+          document.querySelector("#ny").parentElement.style.boxShadow =
+            "0 0 20px rgba(4,120,87,0.5)";
+        }
+      }
+      setInterval(updateTimers, 60000);
+      updateTimers();
+
+      function notifyMe() {
+        if (!("Notification" in window))
+          return alert("مرورگر اعلان پشتیبانی نمی‌کند");
+        Notification.requestPermission().then((perm) => {
+          if (perm === "granted")
+            alert("اعلان‌ها فعال شد! وقتی Killzone شروع شود اطلاع می‌ده");
+        });
+      }
+    </script>
+  </body>
+</html>

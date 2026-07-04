@@ -1,0 +1,213 @@
+<!-- Notes Overlay Content -->
+<!-- این فایل محتوای صفحه یادداشت‌ها را شامل می‌شود -->
+
+<div style="padding: 1rem;">
+  <div style="margin-bottom: 2rem;">
+    <h3 style="color: var(--text-primary); font-size: 1.2rem; margin-bottom: 0.5rem;">
+      📝 یادداشت‌های من
+    </h3>
+    <p style="color: var(--text-muted); font-size: 0.9rem;">
+      یادداشت‌های شخصی و نکات مهم معاملاتی
+    </p>
+  </div>
+
+  <!-- Add Note Button -->
+  <div style="margin-bottom: 1.5rem;">
+    <button id="addNoteBtn" style="
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      border: none;
+      border-radius: var(--radius-md);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.3s;
+    " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+      <span>➕</span>
+      <span>یادداشت جدید</span>
+    </button>
+  </div>
+
+  <!-- Notes List -->
+  <div id="notesList" style="display: flex; flex-direction: column; gap: 1rem;">
+    
+    <!-- Sample Note 1 -->
+    <div class="note-item" style="
+      background: var(--bg-card);
+      padding: 1.5rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      transition: all 0.3s;
+    ">
+      <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+        <div>
+          <div style="color: var(--text-primary); font-weight: 700; font-size: 1.05rem; margin-bottom: 0.25rem;">
+            استراتژی معاملاتی
+          </div>
+          <div style="color: var(--text-muted); font-size: 0.8rem;">
+            📅 2025/01/15 - 14:30
+          </div>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+          <button style="
+            width: 32px;
+            height: 32px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: var(--radius-sm);
+            color: var(--accent-cyan);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          " title="ویرایش">
+            ✏️
+          </button>
+          <button style="
+            width: 32px;
+            height: 32px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: var(--radius-sm);
+            color: var(--sell-light);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          " title="حذف">
+            🗑️
+          </button>
+        </div>
+      </div>
+      
+      <div style="color: var(--text-secondary); line-height: 1.7;">
+        نکات کلیدی برای معامله در بازار صعودی:
+        <ul style="margin-top: 0.5rem; padding-right: 1.5rem;">
+          <li>همیشه روند کلی بازار را بررسی کنید</li>
+          <li>از Stop Loss حتماً استفاده کنید</li>
+          <li>در نقاط کلیدی حجم معامله را کم کنید</li>
+        </ul>
+      </div>
+      
+      <div style="display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap;">
+        <span style="padding: 0.25rem 0.75rem; background: rgba(212, 175, 55, 0.1); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: var(--radius-full); font-size: 0.75rem; color: var(--accent-gold);">
+          #استراتژی
+        </span>
+        <span style="padding: 0.25rem 0.75rem; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: var(--radius-full); font-size: 0.75rem; color: var(--accent-cyan);">
+          #مهم
+        </span>
+      </div>
+    </div>
+
+    <!-- Sample Note 2 -->
+    <div class="note-item" style="
+      background: var(--bg-card);
+      padding: 1.5rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      transition: all 0.3s;
+    ">
+      <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+        <div>
+          <div style="color: var(--text-primary); font-weight: 700; font-size: 1.05rem; margin-bottom: 0.25rem;">
+            اشتباهات رایج
+          </div>
+          <div style="color: var(--text-muted); font-size: 0.8rem;">
+            📅 2025/01/10 - 09:15
+          </div>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+          <button style="
+            width: 32px;
+            height: 32px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: var(--radius-sm);
+            color: var(--accent-cyan);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          " title="ویرایش">
+            ✏️
+          </button>
+          <button style="
+            width: 32px;
+            height: 32px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: var(--radius-sm);
+            color: var(--sell-light);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          " title="حذف">
+            🗑️
+          </button>
+        </div>
+      </div>
+      
+      <div style="color: var(--text-secondary); line-height: 1.7;">
+        اشتباهاتی که باید از آنها پرهیز کنم:
+        <ul style="margin-top: 0.5rem; padding-right: 1.5rem;">
+          <li>معامله بدون استراتژی مشخص</li>
+          <li>افزایش حجم بعد از ضرر (Revenge Trading)</li>
+          <li>نادیده گرفتن سیگنال‌های خروج</li>
+        </ul>
+      </div>
+      
+      <div style="display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap;">
+        <span style="padding: 0.25rem 0.75rem; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: var(--radius-full); font-size: 0.75rem; color: var(--sell-light);">
+          #اشتباهات
+        </span>
+        <span style="padding: 0.25rem 0.75rem; background: rgba(4, 120, 87, 0.1); border: 1px solid rgba(4, 120, 87, 0.2); border-radius: var(--radius-full); font-size: 0.75rem; color: var(--buy-light);">
+          #درس
+        </span>
+      </div>
+    </div>
+
+    <!-- Empty State (نمایش وقتی یادداشتی نیست) -->
+    <div id="emptyState" style="display: none; text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
+      <div style="font-size: 3rem; margin-bottom: 1rem;">📝</div>
+      <div style="font-size: 1.1rem; margin-bottom: 0.5rem;">هنوز یادداشتی ندارید</div>
+      <div style="font-size: 0.9rem;">با کلیک روی دکمه بالا، اولین یادداشت خود را بنویسید</div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  .note-item:hover {
+    border-color: var(--border-light);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+</style>
+
+<script>
+  console.log('Notes overlay loaded');
+  
+  // دکمه افزودن یادداشت
+  document.getElementById('addNoteBtn')?.addEventListener('click', function() {
+    alert('قابلیت افزودن یادداشت جدید!\n\nشما می‌توانید فرم افزودن یادداشت را اینجا پیاده‌سازی کنید.');
+  });
+  
+  // مدیریت یادداشت‌ها با localStorage
+  // شما می‌توانید یادداشت‌ها را در localStorage ذخیره کنید
+  
+  // نمونه ساختار داده:
+  // const notes = [
+  //   {
+  //     id: 1,
+  //     title: 'عنوان',
+  //     content: 'محتوا',
+  //     tags: ['tag1', 'tag2'],
+  //     date: '2025-01-15T14:30:00'
+  //   }
+  // ];
+</script>

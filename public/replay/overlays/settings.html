@@ -1,0 +1,58 @@
+<!-- Settings Overlay Content -->
+<!-- این فایل محتوای صفحه تنظیمات را شامل می‌شود -->
+
+<div style="padding: 1rem;">
+  <div style="margin-bottom: 2rem;">
+    <h3 style="color: var(--text-primary); font-size: 1.2rem; margin-bottom: 0.5rem;">
+      🎨 تنظیمات ظاهری
+    </h3>
+    <p style="color: var(--text-muted); font-size: 0.9rem;">
+      تنظیمات مربوط به ظاهر و تم پلتفرم
+    </p>
+  </div>
+
+  <!-- شما می‌توانید محتوای دلخواه خود را اینجا قرار دهید -->
+  <div style="background: var(--bg-card); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--border);">
+    <p style="color: var(--text-secondary);">
+      این یک نمونه template است. شما می‌توانید محتوای دلخواه خود را اینجا بنویسید.
+    </p>
+    <p style="color: var(--text-muted); margin-top: 1rem; font-size: 0.85rem;">
+      می‌توانید HTML، CSS و JavaScript استفاده کنید.
+    </p>
+  </div>
+
+  <div style="margin-top: 2rem;">
+    <h4 style="color: var(--text-primary); margin-bottom: 1rem;">تنظیمات پیشرفته</h4>
+    
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+      <!-- نمونه toggle -->
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--bg-card); border-radius: var(--radius-sm); border: 1px solid var(--border);">
+        <div>
+          <div style="color: var(--text-primary); font-weight: 600;">حالت شب</div>
+          <div style="color: var(--text-muted); font-size: 0.85rem;">فعال/غیرفعال کردن حالت تاریک</div>
+        </div>
+        <label style="position: relative; display: inline-block; width: 50px; height: 24px;">
+          <input type="checkbox" style="opacity: 0; width: 0; height: 0;">
+          <span style="position: absolute; cursor: pointer; inset: 0; background: var(--bg-tertiary); transition: 0.3s; border-radius: 24px;"></span>
+        </label>
+      </div>
+
+      <!-- نمونه select -->
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--bg-card); border-radius: var(--radius-sm); border: 1px solid var(--border);">
+        <div>
+          <div style="color: var(--text-primary); font-weight: 600;">زبان</div>
+          <div style="color: var(--text-muted); font-size: 0.85rem;">انتخاب زبان رابط کاربری</div>
+        </div>
+        <select style="padding: 0.5rem 1rem; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-primary);">
+          <option>فارسی</option>
+          <option>English</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // می‌توانید JavaScript خود را اینجا بنویسید
+  console.log('Settings overlay loaded');
+</script>

@@ -1,0 +1,58 @@
+# dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# next.js
+.next/
+out/
+dist/
+
+# production
+build/
+
+# env files
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# vercel
+.vercel
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+yarn-error.log*
+
+# local mongodb data
+.mongodb/
+
+# runtime
+*.pid
+*.seed
+*.pid.lock
+
+# coverage
+coverage/
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# optional (if you don't want local configs tracked)
+components.json
+liara.json
+
+# proxy / local configs (if sensitive)
+proxy.ts

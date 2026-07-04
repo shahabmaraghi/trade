@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <title>نقشه جهانی بورس‌ها و مراکز مالی ۲۰۲۵</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+      :root {
+        --bg: #000000;
+        --gold: #d4af37;
+        --text: #f8faff;
+        --border: rgba(255, 255, 255, 0.06);
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Vazirmatn", sans-serif;
+      }
+      h1 {
+        text-align: center;
+        color: var(--gold);
+        padding: 20px;
+        font-size: 2rem;
+      }
+      #map {
+        height: 85vh;
+        width: 95vw;
+        border-radius: 16px;
+        margin: 20px auto;
+        display: block;
+        box-shadow: 0 10px 40px rgba(212, 175, 55, 0.3);
+        border: 1px solid var(--border);
+      }
+      .leaflet-popup-content {
+        color: #000;
+        font-weight: bold;
+        background: #d4af37;
+        border-radius: 8px;
+        padding: 10px;
+      }
+      .leaflet-popup-tip {
+        background: var(--gold);
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7);
+        }
+        70% {
+          box-shadow: 0 0 0 20px rgba(212, 175, 55, 0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>نقشه جهانی مبادلات بورس و مراکز مالی عمده (۲۰۲۵)</h1>
+    <div id="map"></div>
+
+    <script>
+      var map = L.map("map").setView([20, 0], 2);
+
+      // Tile Layer جایگزین پایدار با تم تاریک (Stadia Alidade Smooth Dark - خیلی زیبا و لوکس)
+      L.tileLayer(
+        "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",
+        {
+          attribution:
+            '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>',
+          maxZoom: 20,
+        }
+      ).addTo(map);
+
+      // اگر بخوای CartoDB رو نگه داری (گاهی مشکل داره)، این رو جایگزین کن:
+      // L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
+
+      // داده‌های بورس‌ها
+      const exchanges = [
+        [40.7128, -74.006, "NYSE", "نیویورک", "۳۱+ تریلیون دلار"],
+        [40.7061, -74.0092, "NASDAQ", "نیویورک", "۲۵+ تریلیون دلار"],
+        [51.5074, -0.1278, "LSE", "لندن", "۴ تریلیون دلار"],
+        [35.6762, 139.6503, "TSE (JPX)", "توکیو", "۶.۵ تریلیون دلار"],
+        [31.2304, 121.4737, "SSE", "شانگهای", "۷+ تریلیون دلار"],
+        [22.3193, 114.1694, "HKEX", "هنگ‌کنگ", "۵ تریلیون دلار"],
+        [48.8566, 2.3522, "Euronext", "پاریس/آمستردام", "۵ تریلیون دلار"],
+        [19.076, 72.8777, "NSE/BSE", "بمبئی", "۴.۵ تریلیون دلار"],
+        [43.6532, -79.3832, "TSX", "تورنتو", "۳ تریلیون دلار"],
+        [50.1109, 8.6821, "Deutsche Börse", "فرانکفورت", "۲.۵ تریلیون دلار"],
+      ];
+
+      exchanges.forEach((e) => {
+        const marker = L.circleMarker([e[0], e[1]], {
+          radius: 14 + Math.sqrt(parseFloat(e[4]) * 1.5),
+          fillColor: "#d4af37",
+          color: "#b89778",
+          weight: 3,
+          opacity: 1,
+          fillOpacity: 0.85,
+        }).addTo(map);
+
+        marker.bindPopup(
+          `<b>${e[2]}</b><br>شهر: ${e[3]}<br>ارزش بازار: ${e[4]}`
+        );
+
+        // انیمیشن pulse طلایی
+        marker.getElement().style.animation = "pulse 3s infinite";
+      });
+
+      // فیکس اندازه نقشه (مهم!)
+      setTimeout(() => map.invalidateSize(), 300);
+    </script>
+  </body>
+</html>

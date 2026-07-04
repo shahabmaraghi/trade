@@ -1,0 +1,91 @@
+/* Custom styles for react-multi-date-picker */
+.custom-calendar {
+  --rmdp-primary: #f59e0b !important;
+  --rmdp-secondary: #f59e0b !important;
+  --rmdp-shadow: none !important;
+  --rmdp-today: #f59e0b !important;
+  --rmdp-hover: #f59e0b33 !important;
+  --rmdp-selected: #f59e0b !important;
+}
+
+.custom-calendar .rmdp-day.rmdp-selected span {
+  background-color: #f59e0b !important;
+  color: #000 !important;
+  box-shadow: 0 0 5px #f59e0b !important;
+}
+
+.custom-calendar .rmdp-day.rmdp-today span {
+  background-color: rgba(245, 158, 11, 0.2) !important;
+  color: #f59e0b !important;
+}
+
+.custom-calendar .rmdp-week-day {
+  color: #f59e0b !important;
+}
+
+.custom-calendar .rmdp-header-values {
+  color: #fff !important;
+  font-weight: bold;
+}
+
+.custom-calendar .rmdp-arrow {
+  border-color: #f59e0b !important;
+}
+
+.custom-calendar .rmdp-arrow-container:hover {
+  background-color: rgba(245, 158, 11, 0.2) !important;
+  box-shadow: 0 0 5px rgba(245, 158, 11, 0.2) !important;
+}
+
+.custom-calendar .rmdp-day:not(.rmdp-disabled):not(.rmdp-day-hidden) span:hover {
+  background-color: rgba(245, 158, 11, 0.3) !important;
+  color: #fff !important;
+}
+
+.custom-calendar .rmdp-day.rmdp-disabled span {
+  color: #666 !important;
+}
+
+.custom-calendar .rmdp-day span {
+  color: #fff !important;
+  font-size: 14px;
+}
+
+.custom-calendar .rmdp-panel-body li {
+  background-color: #1a1a1a !important;
+  box-shadow: 0 0 2px #333 !important;
+}
+
+.custom-calendar .rmdp-panel-body li:hover {
+  background-color: #252525 !important;
+  box-shadow: 0 0 5px #f59e0b !important;
+}
+
+.custom-calendar .rmdp-panel-body li .b-deselect {
+  color: #f59e0b !important;
+}
+
+.custom-calendar .rmdp-panel-body li.bg-amber-500 {
+  background-color: #f59e0b !important;
+}
+
+.custom-calendar .rmdp-calendar {
+  padding: 0.5rem !important;
+}
+
+.custom-calendar .rmdp-day-picker {
+  padding: 0 !important;
+}
+
+.custom-calendar .rmdp-header {
+  margin: 0.5rem 0 !important;
+}
+
+.custom-calendar .rmdp-month-picker,
+.custom-calendar .rmdp-year-picker {
+  background-color: #1a1a1a !important;
+}
+
+.custom-calendar .rmdp-header-values span {
+  padding: 0 0.5rem !important;
+}

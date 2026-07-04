@@ -1,0 +1,72 @@
+<!-- Statistics Overlay Content -->
+<!-- این فایل محتوای صفحه آمار و گزارش را شامل می‌شود -->
+
+<div style="padding: 1rem;">
+  <div style="margin-bottom: 2rem;">
+    <h3 style="color: var(--text-primary); font-size: 1.2rem; margin-bottom: 0.5rem;">
+      📈 آمار عملکرد
+    </h3>
+    <p style="color: var(--text-muted); font-size: 0.9rem;">
+      تحلیل و بررسی عملکرد معاملات شما
+    </p>
+  </div>
+
+  <!-- Stats Cards -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+    
+    <!-- Total Trades -->
+    <div style="background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(59, 130, 246, 0.1)); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--border);">
+      <div style="color: var(--accent-gold); font-size: 0.85rem; margin-bottom: 0.5rem;">کل معاملات</div>
+      <div style="color: var(--text-primary); font-size: 2rem; font-weight: 700;">0</div>
+      <div style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.5rem;">↑ 0% این هفته</div>
+    </div>
+
+    <!-- Win Rate -->
+    <div style="background: linear-gradient(135deg, rgba(4, 120, 87, 0.1), rgba(16, 185, 129, 0.1)); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--border);">
+      <div style="color: var(--buy-light); font-size: 0.85rem; margin-bottom: 0.5rem;">نرخ برد</div>
+      <div style="color: var(--text-primary); font-size: 2rem; font-weight: 700;">0%</div>
+      <div style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.5rem;">0 معامله موفق</div>
+    </div>
+
+    <!-- Total Profit -->
+    <div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(96, 165, 250, 0.1)); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--border);">
+      <div style="color: var(--accent-cyan); font-size: 0.85rem; margin-bottom: 0.5rem;">سود کل</div>
+      <div style="color: var(--text-primary); font-size: 2rem; font-weight: 700;">$0</div>
+      <div style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.5rem;">ROI: 0%</div>
+    </div>
+
+    <!-- Average Trade -->
+    <div style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(239, 68, 68, 0.1)); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--border);">
+      <div style="color: var(--accent-pink); font-size: 0.85rem; margin-bottom: 0.5rem;">میانگین معامله</div>
+      <div style="color: var(--text-primary); font-size: 2rem; font-weight: 700;">$0</div>
+      <div style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.5rem;">به ازای هر معامله</div>
+    </div>
+
+  </div>
+
+  <!-- Chart Placeholder -->
+  <div style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-md); border: 1px solid var(--border); text-align: center;">
+    <div style="color: var(--text-muted); font-size: 1rem; margin-bottom: 0.5rem;">📊</div>
+    <div style="color: var(--text-secondary);">نمودار عملکرد</div>
+    <div style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem;">
+      شما می‌توانید نمودارهای دلخواه خود را اینجا قرار دهید
+    </div>
+  </div>
+
+  <!-- Recent Performance -->
+  <div style="margin-top: 2rem;">
+    <h4 style="color: var(--text-primary); margin-bottom: 1rem;">عملکرد اخیر</h4>
+    <div style="background: var(--bg-card); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--border);">
+      <p style="color: var(--text-muted); text-align: center;">هنوز معامله‌ای ثبت نشده است</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // JavaScript برای محاسبات و نمودارها
+  console.log('Statistics overlay loaded');
+  
+  // شما می‌توانید داده‌های آماری را از localStorage یا API دریافت کنید
+  // و نمودارهای تعاملی با کتابخانه‌هایی مثل Chart.js بسازید
+</script>

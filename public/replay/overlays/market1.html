@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Risk Calculator پیشرفته</title>
+    <style>
+      :root {
+        --bg: #000;
+        --card: #111;
+        --gold: #d4af37;
+        --text: #f8faff;
+        --green: #047857;
+        --red: #991b1b;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: Vazirmatn, sans-serif;
+        padding: 20px;
+      }
+      .container {
+        max-width: 600px;
+        margin: auto;
+      }
+      h1 {
+        text-align: center;
+        color: var(--gold);
+      }
+      .input-group {
+        margin: 20px 0;
+      }
+      label {
+        display: block;
+        margin-bottom: 8px;
+      }
+      input {
+        width: 100%;
+        padding: 12px;
+        background: #0d0d0d;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 8px;
+        color: var(--text);
+      }
+      .result {
+        padding: 20px;
+        background: var(--card);
+        border-radius: 12px;
+        margin-top: 30px;
+        text-align: center;
+        font-size: 1.2rem;
+      }
+      .safe {
+        color: var(--green);
+      }
+      .danger {
+        color: var(--red);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Risk Calculator پیشرفته</h1>
+
+      <div class="input-group">
+        <label>بالانس حساب ($)</label>
+        <input type="number" id="balance" value="10000" onchange="calc()" />
+      </div>
+      <div class="input-group">
+        <label>ریسک هر معامله (%)</label>
+        <input
+          type="number"
+          step="0.1"
+          id="riskPercent"
+          value="1"
+          onchange="calc()"
+        />
+      </div>
+      <div class="input-group">
+        <label>حداکثر ضرر روزانه ($)</label>
+        <input type="number" id="dailyLoss" value="300" onchange="calc()" />
+      </div>
+      <div class="input-group">
+        <label>استاپ لاس (پیپ یا قیمت)</label>
+        <input
+          type="number"
+          step="0.01"
+          id="sl"
+          value="100"
+          onchange="calc()"
+        />
+      </div>
+
+      <div class="result">
+        <div>ریسک دلاری: <span id="riskDollar">100</span>$</div>
+        <div>
+          حجم پیشنهادی: <span id="size" class="safe">1.00</span> لات/کوین
+        </div>
+        <div>تعداد معامله مجاز امروز: <span id="tradesLeft">3</span></div>
+      </div>
+    </div>
+
+    <script>
+      function calc() {
+        let balance = +document.getElementById("balance").value;
+        let riskP = +document.getElementById("riskPercent").value / 100;
+        let daily = +document.getElementById("dailyLoss").value;
+        let sl = +document.getElementById("sl").value;
+
+        let riskDollar = balance * riskP;
+        let size = (riskDollar / sl).toFixed(2);
+        let tradesLeft = Math.floor(daily / riskDollar);
+
+        document.getElementById("riskDollar").textContent =
+          riskDollar.toFixed(2);
+        document.getElementById("size").textContent = size;
+        document.getElementById("tradesLeft").textContent = tradesLeft;
+      }
+      calc();
+    </script>
+  </body>
+</html>
