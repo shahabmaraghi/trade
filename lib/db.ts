@@ -85,14 +85,14 @@ export async function connectDB(): Promise<void> {
     }
   }
 
-  try {
-    const db = await mongooseInstance.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/TChart")
-    connection.isConnected = db.connections[0].readyState === 1
-    console.log(`MongoDB Connected: ${db.connection.host}`)
-  } catch (error) {
-    console.error("Error connecting to MongoDB:", error)
-    throw error
-  }
+  // try {
+  //   const db = await mongooseInstance.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/TChart")
+  //   connection.isConnected = db.connections[0].readyState === 1
+  //   console.log(`MongoDB Connected: ${db.connection.host}`)
+  // } catch (error) {
+  //   console.error("Error connecting to MongoDB:", error)
+  //   throw error
+  // }
 }
 
 export const connectToDatabase: () => Promise<void> = connectDB
