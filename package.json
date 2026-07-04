@@ -12,8 +12,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@ai-sdk/openai": "^4.0.7",
-    "@ai-sdk/react": "^4.0.16",
+    "@ai-sdk/openai": "^4.0.0",
+    "@ai-sdk/react": "^4.0.0",
     "@ant-design/icons": "^6.2.2",
     "@aws-sdk/client-s3": "latest",
     "@aws-sdk/s3-request-presigner": "latest",
@@ -68,7 +68,7 @@
     "@tiptap/pm": "latest",
     "@tiptap/react": "latest",
     "@tiptap/starter-kit": "latest",
-    "ai": "^7.0.15",
+    "ai": "^7.0.0",
     "antd": "^6.3.7",
     "autoprefixer": "^10.4.20",
     "axios": "^1.16.0",
@@ -103,7 +103,7 @@
     "react-multi-date-picker": "^4.5.2",
     "react-resizable-panels": "^4.11.0",
     "react-select": "latest",
-    "recharts": "latest",
+    "recharts": "^3.0.0",
     "sonner": "latest",
     "styled-components": "latest",
     "swiper": "latest",
