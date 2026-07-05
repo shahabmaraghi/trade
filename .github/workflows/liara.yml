@@ -20,6 +20,7 @@ jobs:
         env:
           LIARA_TOKEN: ${{ secrets.LIARA_API_TOKEN }}
         run: |
+          cp pnpmfile.cjs .pnpmfile.cjs
           npm i -g @liara/cli@9
           liara deploy \
             --app="hirmandtrade-web" \

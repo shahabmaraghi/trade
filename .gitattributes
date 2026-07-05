@@ -1,0 +1,5 @@
+* text=auto
+.pnpmfile.cjs text eol=lf
+pnpmfile.cjs text eol=lf
+pnpm-lock.yaml text eol=lf
+.npmrc text eol=lf
