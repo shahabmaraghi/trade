@@ -20,6 +20,9 @@ jobs:
         with:
           version: 11.10.0
 
+      - name: install-liara-cli
+        run: npm i -g @liara/cli@9 --registry=https://registry.npmjs.org
+
       - name: update-liara
         env:
           LIARA_TOKEN: ${{ secrets.LIARA_API_TOKEN }}
@@ -29,7 +32,6 @@ jobs:
           cp -f pnpmfile.cjs .pnpmfile.cjs
           pnpm install --lockfile-only
           pnpm install --frozen-lockfile
-          npm i -g @liara/cli@9
           liara deploy \
             --app="hirmandtrade-web" \
             --api-token="$LIARA_TOKEN" \
