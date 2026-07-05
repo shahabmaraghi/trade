@@ -9,7 +9,8 @@
     "mongo:verify": "node scripts/verify-mongo.mjs",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prepare:pnpmfile": "node -e \"require('fs').copyFileSync('pnpmfile.cjs','.pnpmfile.cjs')\""
   },
   "dependencies": {
     "@ai-sdk/openai": "^4.0.0",

@@ -16,11 +16,19 @@ jobs:
         with:
           node-version: "22"
 
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.10.0
+
       - name: update-liara
         env:
           LIARA_TOKEN: ${{ secrets.LIARA_API_TOKEN }}
+          CI: true
+          npm_config_registry: https://package-mirror.liara.ir/repository/npm/
         run: |
-          cp pnpmfile.cjs .pnpmfile.cjs
+          cp -f pnpmfile.cjs .pnpmfile.cjs
+          pnpm install --lockfile-only
+          pnpm install --frozen-lockfile
           npm i -g @liara/cli@9
           liara deploy \
             --app="hirmandtrade-web" \
