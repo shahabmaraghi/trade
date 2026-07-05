@@ -4,8 +4,7 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  sharp: link:./patches/sharp-stub
+pnpmfileChecksum: sha256-rjkENA7arzzpzd6rMcKDEHgNL7aV3lPl1rDvgZvJ1To=
 
 importers:
 
@@ -348,8 +347,6 @@ importers:
       typescript:
         specifier: ^5
         version: 5.9.3
-
-  patches/sharp-stub: {}
 
 packages:
 
@@ -6271,7 +6268,6 @@ snapshots:
       '@next/swc-linux-x64-musl': 16.2.10
       '@next/swc-win32-arm64-msvc': 16.2.10
       '@next/swc-win32-x64-msvc': 16.2.10
-      sharp: link:patches/sharp-stub
     transitivePeerDependencies:
       - '@babel/core'
       - babel-plugin-macros
