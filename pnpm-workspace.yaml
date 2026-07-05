@@ -1,7 +1,2 @@
-packages:
-  - .
-minimumReleaseAge: 1440
-minimumReleaseAgeStrict: true
 allowBuilds:
-  sharp: true
-  mongodb-memory-server: false
+  sharp: set this to true or false
