@@ -10,7 +10,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prepare:pnpmfile": "node -e \"require('fs').copyFileSync('pnpmfile.cjs','.pnpmfile.cjs')\""
+    "lockfile:update": "node scripts/update-pnpm-lock.mjs"
   },
   "dependencies": {
     "@ai-sdk/openai": "^4.0.0",
