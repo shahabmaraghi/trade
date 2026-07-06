@@ -1,9 +1,12 @@
+import { connectDB } from "@/lib/db"
 import { type NextRequest, NextResponse } from "next/server"
 import Mentor from "@/models/Mentor"
 import { createSession } from "@/lib/mentors/auth"
 
 export async function POST(request: NextRequest) {
   try {
+    await connectDB()
+
     const { username, password } = await request.json()
 
     if (!username || !password) {

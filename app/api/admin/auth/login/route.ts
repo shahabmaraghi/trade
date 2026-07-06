@@ -1,9 +1,12 @@
+import { connectDB } from "@/lib/db"
 import { type NextRequest, NextResponse } from "next/server"
 import { User } from "@/models"
 import { signToken, applyAuthCookie, type TokenData } from "@/lib/auth"
 
 export async function POST(req: NextRequest) {
   try {
+    await connectDB()
+
     const { phone, password } = await req.json()
 
     // Validate phone number

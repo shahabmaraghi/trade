@@ -1,9 +1,12 @@
+import { connectDB } from "@/lib/db"
 import { NextRequest, NextResponse } from "next/server"
 import { getUserFromSession } from "@/lib/auth"
 import { User } from "@/models"
 
 export async function GET(req: NextRequest) {
   try {
+    await connectDB()
+
     const user = await getUserFromSession()
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })

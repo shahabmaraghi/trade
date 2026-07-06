@@ -1,9 +1,12 @@
+import { connectDB } from "@/lib/db"
 import { type NextRequest, NextResponse } from "next/server"
 import { Consultant } from "@/models/Consultant"
 import { getCurrentUser, isAdmin } from "@/lib/auth"
 
 export async function GET(req: NextRequest) {
   try {
+    await connectDB()
+
 
     // Get query parameters
     const searchParams = req.nextUrl.searchParams
@@ -38,6 +41,8 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
+    await connectDB()
+
 
     // Check if user is authenticated and is admin
     const user = await getCurrentUser()

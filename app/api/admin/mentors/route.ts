@@ -1,3 +1,4 @@
+import { connectDB } from "@/lib/db"
 import { NextResponse } from 'next/server';
 import Mentor from '@/models/Mentor';
 import { getAdminFromSession } from '@/lib/auth';
@@ -6,6 +7,8 @@ import randomString from '@/lib/randomString';
 // GET /api/admin/mentors
 export async function GET() {
   try {
+    await connectDB()
+
     const admin = await getAdminFromSession();
     if (!admin) {
       return NextResponse.json({ message: 'دسترسی غیر مجاز' }, { status: 403 });
@@ -25,6 +28,8 @@ export async function GET() {
 // POST /api/admin/mentors
 export async function POST(request: Request) {
   try {
+    await connectDB()
+
     const admin = await getAdminFromSession();
     if (!admin) {
       return NextResponse.json({ message: 'دسترسی غیر مجاز' }, { status: 403 });

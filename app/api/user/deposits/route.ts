@@ -1,9 +1,11 @@
+import { connectDB } from "@/lib/db"
 import { type NextRequest, NextResponse } from "next/server"
 import { DepositRequest, User } from "@/models"
 import { getCurrentUser } from "@/lib/auth"
 import { protectRoute } from "@/lib/access-control"
 
 export async function GET(req: NextRequest) {
+    await connectDB()
   const authError = await protectRoute(req)
   if (authError) return authError
 
@@ -25,6 +27,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+    await connectDB()
   const authError = await protectRoute(req)
   if (authError) return authError
 

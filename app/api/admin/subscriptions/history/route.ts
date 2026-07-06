@@ -1,9 +1,11 @@
+import { connectDB } from "@/lib/db"
 import { type NextRequest, NextResponse } from "next/server"
 import { getCurrentUser } from "@/lib/auth"
 import { getUserSubscriptionHistory } from "@/lib/subscription"
 import { protectRoute } from "@/lib/access-control"
 
 export async function GET(req: NextRequest) {
+    await connectDB()
   // Check if user is authenticated
   const authError = await protectRoute(req)
   if (authError) return authError

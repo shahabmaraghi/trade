@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: "standalone",
+  serverExternalPackages: ["mongoose", "mongodb", "bson"],
   turbopack: (config, { isServer }) => {
     // Exclude MongoDB from client-side bundles
     if (!isServer) {

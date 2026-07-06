@@ -1,3 +1,4 @@
+import { connectDB } from "@/lib/db"
 import { type NextRequest, NextResponse } from "next/server"
 import { Analysis, AnalysisLike } from "@/models"
 import { getCurrentUser } from "@/lib/auth"
@@ -5,6 +6,8 @@ import mongoose from "mongoose"
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    await connectDB()
+
     const userData = await getCurrentUser()
     if (!userData) {
       return NextResponse.json({ error: "Not authenticated" }, { status: 401 })
@@ -72,6 +75,8 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 // GET endpoint to check if a user has liked an analysis
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    await connectDB()
+
     const userData = await getCurrentUser()
     if (!userData) {
       return NextResponse.json({ liked: false }, { status: 200 })

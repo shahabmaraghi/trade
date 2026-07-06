@@ -1,3 +1,4 @@
+import { connectDB } from "@/lib/db"
 import { NextResponse } from 'next/server';
 import Mentor from '@/models/Mentor';
 import { getAdminFromSession } from '@/lib/auth';
@@ -9,6 +10,8 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    await connectDB()
+
     const admin = await getAdminFromSession();
     if (!admin) {
       return NextResponse.json({ message: 'دسترسی غیر مجاز' }, { status: 403 });
@@ -45,6 +48,8 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    await connectDB()
+
     const admin = await getAdminFromSession();
     if (!admin) {
       return NextResponse.json(
@@ -162,6 +167,8 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    await connectDB()
+
     const admin = await getAdminFromSession();
     if (!admin) {
       return NextResponse.json({ message: 'دسترسی غیر مجاز' }, { status: 403 });

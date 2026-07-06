@@ -1,9 +1,12 @@
+import { connectDB } from "@/lib/db"
 import { type NextRequest, NextResponse } from "next/server"
 import { DepositRequest, Mentor } from "@/models"
 import { getSession } from "@/lib/mentors/auth"
 
 export async function GET() {
   try {
+    await connectDB()
+
     const session = await getSession()
     if (!session) return NextResponse.json({ error: "Not authenticated" }, { status: 401 })
 
@@ -22,6 +25,8 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
+    await connectDB()
+
     const session = await getSession()
     if (!session) return NextResponse.json({ error: "Not authenticated" }, { status: 401 })
 

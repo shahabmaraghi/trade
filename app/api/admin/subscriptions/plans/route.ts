@@ -1,3 +1,4 @@
+import { connectDB } from "@/lib/db"
 import { NextResponse } from "next/server"
 import { SubscriptionPlan } from "@/models"
 import { authMiddleware } from "@/lib/auth"
@@ -6,6 +7,8 @@ import type { NextRequest } from "next/server"
 // GET all subscription plans
 export async function GET(req: NextRequest) {
   try {
+    await connectDB()
+
     const { user, isAuthorized } = await authMiddleware(req, "admin")
 
     if (!isAuthorized) {
@@ -24,6 +27,8 @@ export async function GET(req: NextRequest) {
 // CREATE a new subscription plan
 export async function POST(req: NextRequest) {
   try {
+    await connectDB()
+
     const { user, isAuthorized } = await authMiddleware(req, "admin")
 
     if (!isAuthorized) {

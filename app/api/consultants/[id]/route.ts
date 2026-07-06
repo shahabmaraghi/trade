@@ -1,3 +1,4 @@
+import { connectDB } from "@/lib/db"
 import { type NextRequest, NextResponse } from "next/server"
 import { Consultant } from "@/models/Consultant"
 import { getCurrentUser, isAdmin } from "@/lib/auth"
@@ -5,6 +6,8 @@ import { Reservation } from "@/models/Reservation"
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    await connectDB()
+
     const consultant = await Consultant.findById((await params).id)
 
     if (!consultant) {
@@ -20,6 +23,8 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    await connectDB()
+
 
     // Check if user is authenticated and is admin
     const user = await getCurrentUser()
@@ -49,6 +54,8 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
 
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    await connectDB()
+
 
     // Check if user is authenticated and is admin
     const user = await getCurrentUser()

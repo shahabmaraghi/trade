@@ -1,8 +1,11 @@
+import { connectDB } from "@/lib/db"
 import { type NextRequest, NextResponse } from "next/server"
 import { Analysis, User } from "@/models"
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    await connectDB()
+
 
     const id = (await params).id
     const analysis = await Analysis.findById(id).lean()

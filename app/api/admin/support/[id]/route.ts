@@ -1,9 +1,12 @@
+import { connectDB } from "@/lib/db"
 import { type NextRequest, NextResponse } from "next/server"
 import { SupportTicket } from "@/models"
 import { getCurrentUser } from "@/lib/auth"
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    await connectDB()
+
     const userData = await getCurrentUser()
     if (!userData || userData.role !== "admin") {
       return NextResponse.json({ error: "Not authorized" }, { status: 403 })
@@ -25,6 +28,8 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    await connectDB()
+
     const userData = await getCurrentUser()
     if (!userData || userData.role !== "admin") {
       return NextResponse.json({ error: "Not authorized" }, { status: 403 })
@@ -53,6 +58,8 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    await connectDB()
+
     const userData = await getCurrentUser()
     if (!userData || userData.role !== "admin") {
       return NextResponse.json({ error: "Not authorized" }, { status: 403 })
@@ -98,6 +105,8 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    await connectDB()
+
     const userData = await getCurrentUser()
     if (!userData || userData.role !== "admin") {
       return NextResponse.json({ error: "Not authorized" }, { status: 403 })

@@ -1,9 +1,12 @@
+import { connectDB } from "@/lib/db"
 import { type NextRequest, NextResponse } from "next/server"
 import { DepositRequest, User, Mentor } from "@/models"
 import { getCurrentUser, isAdmin } from "@/lib/auth"
 
 export async function GET(req: NextRequest) {
   try {
+    await connectDB()
+
     const userData = await getCurrentUser()
     if (!userData) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     const admin = await isAdmin()

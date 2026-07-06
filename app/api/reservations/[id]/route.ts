@@ -1,9 +1,12 @@
+import { connectDB } from "@/lib/db"
 import { type NextRequest, NextResponse } from "next/server"
 import { Reservation } from "@/models/Reservation"
 import { getCurrentUser, isAdmin } from "@/lib/auth"
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    await connectDB()
+
 
     // Check authentication
     const user = await getCurrentUser()
@@ -33,6 +36,8 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    await connectDB()
+
 
     // Check authentication
     const user = await getCurrentUser()
@@ -79,6 +84,8 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
 
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    await connectDB()
+
 
     // Check authentication
     const user = await getCurrentUser()

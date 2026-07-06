@@ -1,3 +1,4 @@
+import { connectDB } from "@/lib/db"
 import { type NextRequest, NextResponse } from "next/server"
 import { Reservation } from "@/models/Reservation"
 import { Consultant } from "@/models/Consultant"
@@ -19,6 +20,8 @@ const CALLBACK_URL = process.env.NEXT_PUBLIC_APP_URL
 
 export async function POST(req: NextRequest) {
   try {
+    await connectDB()
+
     const user = await getCurrentUser()
     if (!user) {
       return NextResponse.json({ error: "Not authenticated" }, { status: 401 })

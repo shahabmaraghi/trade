@@ -1,3 +1,4 @@
+import { connectDB } from "@/lib/db"
 import { type NextRequest, NextResponse } from "next/server"
 import { Reservation } from "@/models/Reservation"
 import { getCurrentUser } from "@/lib/auth"
@@ -12,6 +13,8 @@ const MERCHANT_ID = process.env.ZARINPAL_MERCHANT_ID || "xxxxxxxx-xxxx-xxxx-xxxx
 
 export async function POST(req: NextRequest) {
   try {
+    await connectDB()
+
     const user = await getCurrentUser()
     if (!user) {
       return NextResponse.json({ error: "Not authenticated" }, { status: 401 })

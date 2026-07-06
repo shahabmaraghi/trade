@@ -1,9 +1,12 @@
+import { connectDB } from "@/lib/db"
 import { type NextRequest, NextResponse } from "next/server"
 import { SupportTicket } from "@/models"
 import { getCurrentUser } from "@/lib/auth"
 
 export async function GET(req: NextRequest) {
   try {
+    await connectDB()
+
     const userData = await getCurrentUser()
     if (!userData || userData.role !== "admin") {
       return NextResponse.json({ error: "Not authorized" }, { status: 403 })

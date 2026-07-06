@@ -1,9 +1,12 @@
+import { connectDB } from "@/lib/db"
 import { NextResponse } from "next/server"
 import { getSession } from "@/lib/mentors/auth"
 import Mentor from "@/models/Mentor"
 
 export async function GET() {
   try {
+    await connectDB()
+
     const session = await getSession()
 
     if (!session) {

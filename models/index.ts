@@ -1,4 +1,3 @@
-import "@/lib/db"
 import { User } from "./User"
 import { OTPVerification } from "./OTPVerification"
 import { Project } from "./Project"

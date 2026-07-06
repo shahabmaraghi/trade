@@ -1,9 +1,12 @@
+import { connectDB } from "@/lib/db"
 import { NextResponse, type NextRequest } from "next/server"
 import { Analysis } from "@/models"
 import { getCurrentUser, isAdmin } from "@/lib/auth"
 
 export async function GET(req: NextRequest) {
   try {
+    await connectDB()
+
     // Check if user is authenticated and is admin
     const userData = await getCurrentUser()
     if (!userData) {
@@ -48,6 +51,8 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
+    await connectDB()
+
     // Check if user is authenticated and is admin
     const userData = await getCurrentUser()
     if (!userData) {

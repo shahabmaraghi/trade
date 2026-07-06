@@ -1,9 +1,12 @@
+import { connectDB } from "@/lib/db"
 import { type NextRequest, NextResponse } from "next/server"
 import { Reservation } from "@/models/Reservation"
 import { getCurrentUser } from "@/lib/auth"
 
 export async function GET(req: NextRequest) {
   try {
+    await connectDB()
+
 
     // Check authentication
     const user = await getCurrentUser()

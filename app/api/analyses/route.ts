@@ -1,8 +1,11 @@
+import { connectDB } from "@/lib/db"
 import { type NextRequest, NextResponse } from "next/server"
 import { Analysis, User } from "@/models"
 
 export async function GET(req: NextRequest) {
   try {
+    await connectDB()
+
 
     const searchParams = req.nextUrl.searchParams
     const page = Math.max(1, Number.parseInt(searchParams.get("page") || "1"))

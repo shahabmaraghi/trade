@@ -1,3 +1,4 @@
+import { connectDB } from "@/lib/db"
 import { type NextRequest, NextResponse } from "next/server"
 // import { getAuthUser } from "@/lib/auth"
 import { ChartState } from "@/models/ChartStates"
@@ -8,6 +9,8 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    await connectDB()
+
     // const authUser = await getAuthUser()
 
     // if (!authUser) {

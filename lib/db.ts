@@ -8,10 +8,6 @@ declare global {
   var _mongooseCache: MongooseCache | undefined
 }
 
-let mongoose: typeof import("mongoose") | null = null
-let isInitialized = false
-let isPatched = false
-
 function getCache(): MongooseCache {
   if (!global._mongooseCache) {
     global._mongooseCache = { conn: null, promise: null }
@@ -19,67 +15,20 @@ function getCache(): MongooseCache {
   return global._mongooseCache
 }
 
-function patchMongooseForAutoConnect(mongooseInstance: typeof import("mongoose")) {
-  if (isPatched) {
-    return
-  }
-
-  isPatched = true
-
-  async function withDb<T>(operation: () => Promise<T>): Promise<T> {
-    await connectDB()
-    return operation()
-  }
-
-  const originalQueryExec = mongooseInstance.Query.prototype.exec
-  mongooseInstance.Query.prototype.exec = function (...args) {
-    return withDb(() => originalQueryExec.apply(this, args))
-  }
-
-  const originalAggregateExec = mongooseInstance.Aggregate.prototype.exec
-  mongooseInstance.Aggregate.prototype.exec = function (...args) {
-    return withDb(() => originalAggregateExec.apply(this, args))
-  }
-
-  const originalDocumentSave = mongooseInstance.Document.prototype.save
-  mongooseInstance.Document.prototype.save = function (...args) {
-    return withDb(() => originalDocumentSave.apply(this, args))
-  }
-
-  const originalModelCreate = mongooseInstance.Model.create
-  mongooseInstance.Model.create = function (...args) {
-    return withDb(() => originalModelCreate.apply(this, args))
-  }
-
-  const originalInsertMany = mongooseInstance.Model.insertMany
-  mongooseInstance.Model.insertMany = function (...args) {
-    return withDb(() => originalInsertMany.apply(this, args))
-  }
-}
-
-async function initMongoose() {
+async function getMongooseModule() {
   if (typeof window !== "undefined") {
     return null
   }
 
-  if (!mongoose && !isInitialized) {
-    isInitialized = true
-    try {
-      mongoose = await import("mongoose")
+  const mongoose = await import("mongoose")
 
-      if (typeof process.emitWarning !== "function") {
-        process.emitWarning = (warning: string | Error, ...args: unknown[]) => {
-          console.warn(warning, ...args)
-        }
-      }
-
-      mongoose.set("strictQuery", true)
-      patchMongooseForAutoConnect(mongoose)
-    } catch (error) {
-      console.error("Failed to import mongoose:", error)
+  if (typeof process.emitWarning !== "function") {
+    process.emitWarning = (warning: string | Error, ...args: unknown[]) => {
+      console.warn(warning, ...args)
     }
   }
 
+  mongoose.set("strictQuery", true)
   return mongoose
 }
 
@@ -101,18 +50,18 @@ export async function connectDB(): Promise<void> {
     return
   }
 
-  if (!process.env.MONGODB_URI) {
+  if (!process.env.MONGODB_URI?.trim()) {
     console.error("MONGODB_URI is not set")
     throw new Error("MONGODB_URI is not configured")
   }
 
-  const mongooseInstance = await initMongoose()
-  if (!mongooseInstance) {
-    return
+  const mongoose = await getMongooseModule()
+  if (!mongoose) {
+    throw new Error("Mongoose is not available on the server")
   }
 
   if (!cached.promise) {
-    cached.promise = mongooseInstance.connect(process.env.MONGODB_URI).then((instance) => {
+    cached.promise = mongoose.connect(process.env.MONGODB_URI).then((instance) => {
       console.log(`MongoDB Connected: ${instance.connection.host}`)
       return instance
     })
@@ -148,9 +97,5 @@ export async function disconnectDB(): Promise<void> {
 }
 
 export async function getMongoose() {
-  return initMongoose()
-}
-
-if (typeof window === "undefined") {
-  void initMongoose()
+  return getMongooseModule()
 }
