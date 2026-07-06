@@ -1,0 +1,12 @@
+{
+  "app": "hirmandtrade-web",
+  "platform": "node",
+  "port": 3000,
+  "build": {
+    "location": "germany"
+  },
+  "node": {
+    "version": "22",
+    "mirror": false
+  }
+}

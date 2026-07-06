@@ -31,6 +31,7 @@ jobs:
         run: |
           liara deploy \
             --app="hirmandtrade-web" \
+            --platform=node \
             --api-token="$LIARA_TOKEN" \
             --no-app-logs \
             --port=3000

@@ -49,7 +49,6 @@ Thumbs.db
 
 # optional (if you don't want local configs tracked)
 components.json
-liara.json
 
 # proxy / local configs (if sensitive)
 proxy.ts
