@@ -1,4 +1,4 @@
-import { connectDB } from "@/lib/db"
+import { connectDBOr503 } from "@/lib/db"
 import { type NextRequest, NextResponse } from "next/server"
 import ChartState from "@/models/ChartState"
 import { getSession } from "@/lib/mentors/auth"
@@ -6,7 +6,8 @@ import { getSession } from "@/lib/mentors/auth"
 // Get all charts for the current user
 export async function GET() {
   try {
-    await connectDB()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     const session = await getSession()
     if (!session) {
@@ -27,7 +28,8 @@ export async function GET() {
 // Create a new chart
 export async function POST(request: NextRequest) {
   try {
-    await connectDB()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     const session = await getSession()
     if (!session) {

@@ -1,4 +1,4 @@
-import { connectDB } from "@/lib/db"
+import { connectDBOr503 } from "@/lib/db"
 import { type NextRequest, NextResponse } from "next/server"
 import { User, SubscriptionPlan } from "@/models"
 import { signToken, applyAuthCookie, type TokenData } from "@/lib/auth"
@@ -14,7 +14,8 @@ function calculateExpiryDate(days: number, hours: number): Date {
 
 export async function POST(req: NextRequest) {
   try {
-    await connectDB()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     const { phone, fullName, password, referrer, role = "user" } = await req.json()
 

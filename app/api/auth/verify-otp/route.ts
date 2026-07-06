@@ -2,11 +2,12 @@ import { type NextRequest, NextResponse } from "next/server"
 import { OTPVerification } from "@/models/OTPVerification"
 import { User } from "@/models"
 import { signToken, applyAuthCookie, type TokenData } from "@/lib/auth"
-import { connectDB } from "@/lib/db"
+import { connectDBOr503 } from "@/lib/db"
 
 export async function POST(req: NextRequest) {
   try {
-    await connectDB()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     const { phone, code } = await req.json()
 

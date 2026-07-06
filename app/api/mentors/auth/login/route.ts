@@ -1,11 +1,12 @@
-import { connectDB } from "@/lib/db"
+import { connectDBOr503 } from "@/lib/db"
 import { type NextRequest, NextResponse } from "next/server"
 import Mentor from "@/models/Mentor"
 import { createSession } from "@/lib/mentors/auth"
 
 export async function POST(request: NextRequest) {
   try {
-    await connectDB()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     const { username, password } = await request.json()
 

@@ -1,4 +1,4 @@
-import { connectToDatabase } from "@/lib/db"
+import { connectDBOr503 } from "@/lib/db"
 import { BlogPost } from "@/models/BlogPost"
 import { type NextRequest, NextResponse } from "next/server"
 import { isAuthenticated } from "@/lib/access-control"
@@ -6,7 +6,8 @@ import { isAuthenticated } from "@/lib/access-control"
 // GET all posts with pagination, filtering, and sorting
 export async function GET(request: NextRequest) {
   try {
-    await connectToDatabase()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     // Get query parameters
     const searchParams = request.nextUrl.searchParams
@@ -75,7 +76,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    await connectToDatabase()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     const data = await request.json()
 

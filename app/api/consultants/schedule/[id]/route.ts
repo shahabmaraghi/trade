@@ -1,11 +1,12 @@
-import { connectDB } from "@/lib/db"
+import { connectDBOr503 } from "@/lib/db"
 import { type NextRequest, NextResponse } from "next/server"
 import { Consultant } from "@/models/Consultant"
 import { getCurrentUser, isAdmin } from "@/lib/auth"
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    await connectDB()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
 
     // Check if user is authenticated and is admin

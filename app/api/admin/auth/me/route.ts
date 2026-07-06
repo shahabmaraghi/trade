@@ -1,11 +1,12 @@
-import { connectDB } from "@/lib/db"
+import { connectDBOr503 } from "@/lib/db"
 import { type NextRequest, NextResponse } from "next/server"
 import { User } from "@/models"
 import { getCurrentUser } from "@/lib/auth"
 
 export async function GET(req: NextRequest) {
   try {
-    await connectDB()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     const userData = await getCurrentUser()
     if (!userData) {

@@ -1,4 +1,4 @@
-import { connectDB } from "@/lib/db"
+import { connectDBOr503 } from "@/lib/db"
 import { NextResponse } from "next/server"
 import { SubscriptionPlan } from "@/models"
 import type { NextRequest } from "next/server"
@@ -6,7 +6,8 @@ import type { NextRequest } from "next/server"
 // GET all subscription plans
 export async function GET(req: NextRequest) {
   try {
-    await connectDB()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
 
     const plans = await SubscriptionPlan.find().sort({ price: 1 })

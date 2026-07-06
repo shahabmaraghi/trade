@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
-import { connectDB } from "@/lib/db"
+import { connectDBOr503 } from "@/lib/db"
 import { verifyToken } from "@/lib/auth"
 import { User } from "@/models"
 
 export async function PATCH(req: NextRequest) {
     try {
-        await connectDB()
+        const dbError = await connectDBOr503()
+        if (dbError) return dbError
 
         const cookieStore = await cookies()
         const token = cookieStore.get("auth_token")?.value

@@ -1,11 +1,12 @@
-import { connectDB } from "@/lib/db"
+import { connectDBOr503 } from "@/lib/db"
 import { NextRequest, NextResponse } from "next/server"
 import { getUserFromSession } from "@/lib/auth"
 import { User } from "@/models"
 
 export async function GET(req: NextRequest) {
   try {
-    await connectDB()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     const user = await getUserFromSession()
     if (!user) {

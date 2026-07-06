@@ -1,4 +1,4 @@
-import { connectDB } from "@/lib/db"
+import { connectDBOr503 } from "@/lib/db"
 import { type NextRequest, NextResponse } from "next/server"
 import ChartState from "@/models/ChartState"
 import { getSession } from "@/lib/mentors/auth"
@@ -6,7 +6,8 @@ import { getSession } from "@/lib/mentors/auth"
 // Get a specific chart
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    await connectDB()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     const session = await getSession()
     if (!session) {
@@ -34,7 +35,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 // Update a chart
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    await connectDB()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     const session = await getSession()
     if (!session) {
@@ -79,7 +81,8 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 // Delete a chart
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    await connectDB()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     const session = await getSession()
     if (!session) {

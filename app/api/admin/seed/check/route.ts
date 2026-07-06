@@ -1,4 +1,4 @@
-import { connectDB } from "@/lib/db"
+import { connectDBOr503 } from "@/lib/db"
 import { type NextRequest, NextResponse } from "next/server"
 import { User } from "@/models/User"
 import { SubscriptionPlan } from "@/models/SubscriptionPlan"
@@ -13,7 +13,8 @@ import { BlogCategory } from "@/models/BlogCategory"
  */
 export async function GET(request: NextRequest) {
   try {
-    await connectDB()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     // Connect to the database
 

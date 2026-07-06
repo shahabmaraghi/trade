@@ -3,11 +3,12 @@ import { cookies } from "next/headers";
 
 import { verifyToken } from "@/lib/auth";
 import { User } from "@/models";
-import { connectDB } from "@/lib/db";
+import { connectDBOr503 } from "@/lib/db";
 
 export async function GET() {
     try {
-        await connectDB();
+        const dbError = await connectDBOr503();
+        if (dbError) return dbError;
 
         const cookieStore = await cookies();
         const authToken = cookieStore.get("auth_token");
@@ -52,7 +53,8 @@ export async function GET() {
 
 export async function PATCH(req: NextRequest) {
     try {
-        await connectDB();
+        const dbError = await connectDBOr503();
+        if (dbError) return dbError;
 
         const cookieStore = await cookies();
         const authToken = cookieStore.get("auth_token");

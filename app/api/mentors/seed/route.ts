@@ -1,10 +1,11 @@
-import { connectDB } from "@/lib/db"
+import { connectDBOr503 } from "@/lib/db"
 import { NextResponse } from "next/server"
 import Mentor from "@/models/Mentor"
 
 export async function GET() {
   try {
-    await connectDB()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     
     // Check if mentor already exists

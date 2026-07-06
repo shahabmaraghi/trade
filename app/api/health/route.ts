@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { connectDB } from "@/lib/db"
+import { connectDBOr503 } from "@/lib/db"
 
 export const dynamic = "force-dynamic"
 
@@ -11,22 +11,23 @@ export async function GET() {
     hasSmsApiKey: Boolean(process.env.SMS_API_KEY?.trim()),
   }
 
-  try {
-    await connectDB()
-    return NextResponse.json({
-      ok: true,
-      db: "connected",
-      env,
-    })
-  } catch (error) {
+  const dbError = await connectDBOr503()
+  if (dbError) {
+    const body = await dbError.json()
     return NextResponse.json(
       {
         ok: false,
         db: "error",
         env,
-        detail: error instanceof Error ? error.message : String(error),
+        ...body,
       },
       { status: 503 },
     )
   }
+
+  return NextResponse.json({
+    ok: true,
+    db: "connected",
+    env,
+  })
 }

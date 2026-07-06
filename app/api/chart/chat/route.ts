@@ -5,7 +5,7 @@ import { generateText } from "ai"
 import { getCurrentUser } from "@/lib/auth"
 import { User, Mentor } from "@/models"
 import { generalMentorUsername } from "@/models/Mentor"
-import { connectDB } from "@/lib/db"
+import { connectDBOr503 } from "@/lib/db"
 
 interface IMessage {
   role: "assistant" | "user"
@@ -49,7 +49,8 @@ function getSelectedAiModel(activeProvider: AiProvider) {
 
 export async function POST(req: Request) {
   try {
-    await connectDB()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     const { messages, chartMode, drawingOwner } = (await req.json()) as {
       messages: any[]

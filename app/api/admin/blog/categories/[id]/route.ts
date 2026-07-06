@@ -1,4 +1,4 @@
-import { connectToDatabase } from "@/lib/db"
+import { connectDBOr503 } from "@/lib/db"
 import { BlogCategory } from "@/models/BlogCategory"
 import { type NextRequest, NextResponse } from "next/server"
 import { isAuthenticated, isAdmin } from "@/lib/access-control"
@@ -7,7 +7,8 @@ import mongoose from "mongoose"
 // GET a specific category by ID
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    await connectToDatabase()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     const { id } = await params
 
@@ -44,7 +45,8 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: "Forbidden: Admin access required" }, { status: 403 })
     }
 
-    await connectToDatabase()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     const { id } = await params
     const data = await request.json()
@@ -98,7 +100,8 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
       return NextResponse.json({ error: "Forbidden: Admin access required" }, { status: 403 })
     }
 
-    await connectToDatabase()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     const { id } = await params
 

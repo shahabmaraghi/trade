@@ -1,11 +1,12 @@
-import { connectDB } from "@/lib/db"
+import { connectDBOr503 } from "@/lib/db"
 import { NextResponse } from "next/server"
 import { getSession } from "@/lib/mentors/auth"
 import Mentor from "@/models/Mentor"
 
 export async function GET() {
   try {
-    await connectDB()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     const session = await getSession()
 

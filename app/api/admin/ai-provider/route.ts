@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import AiSetting from "@/models/AiSetting";
-import { connectDB } from "@/lib/db";
+import { connectDBOr503 } from "@/lib/db";
 
 type AiProvider = "chatgpt" | "gapgpt";
 
 export async function GET() {
   try {
-    await connectDB();
+    const dbError = await connectDBOr503();
+    if (dbError) return dbError;
 
     const setting = await AiSetting.findOneAndUpdate(
       { key: "global" },
@@ -40,7 +41,8 @@ export async function GET() {
 
 export async function PUT(req: NextRequest) {
   try {
-    await connectDB();
+    const dbError = await connectDBOr503();
+    if (dbError) return dbError;
 
     const body = await req.json();
     const activeProvider = body.activeProvider as AiProvider;

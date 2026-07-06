@@ -1,4 +1,4 @@
-import { connectDB } from "@/lib/db"
+import { connectDBOr503 } from "@/lib/db"
 import { type NextRequest, NextResponse } from "next/server"
 import { User } from "@/models/User"
 import { SubscriptionPlan } from "@/models/SubscriptionPlan"
@@ -17,7 +17,8 @@ const SEED_SECRET_KEY = process.env.SEED_SECRET_KEY
  * @returns {object} Status and details of the seeding operation
  */
 export async function GET(request: NextRequest) {
-    await connectDB()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
   // Security check - require a secret key
   const { searchParams } = new URL(request.url)
   const key = searchParams.get("key")

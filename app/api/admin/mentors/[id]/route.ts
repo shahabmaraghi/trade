@@ -1,4 +1,4 @@
-import { connectDB } from "@/lib/db"
+import { connectDBOr503 } from "@/lib/db"
 import { NextResponse } from 'next/server';
 import Mentor from '@/models/Mentor';
 import { getAdminFromSession } from '@/lib/auth';
@@ -10,7 +10,8 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    await connectDB()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     const admin = await getAdminFromSession();
     if (!admin) {
@@ -48,7 +49,8 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    await connectDB()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     const admin = await getAdminFromSession();
     if (!admin) {
@@ -167,7 +169,8 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    await connectDB()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     const admin = await getAdminFromSession();
     if (!admin) {

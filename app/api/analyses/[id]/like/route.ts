@@ -1,4 +1,4 @@
-import { connectDB } from "@/lib/db"
+import { connectDBOr503 } from "@/lib/db"
 import { type NextRequest, NextResponse } from "next/server"
 import { Analysis, AnalysisLike } from "@/models"
 import { getCurrentUser } from "@/lib/auth"
@@ -6,7 +6,8 @@ import mongoose from "mongoose"
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    await connectDB()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     const userData = await getCurrentUser()
     if (!userData) {
@@ -75,7 +76,8 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 // GET endpoint to check if a user has liked an analysis
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    await connectDB()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     const userData = await getCurrentUser()
     if (!userData) {

@@ -1,11 +1,12 @@
-import { connectToDatabase } from "@/lib/db"
+import { connectDBOr503 } from "@/lib/db"
 import { BlogCategory } from "@/models/BlogCategory"
 import { type NextRequest, NextResponse } from "next/server"
 
 // GET all categories
 export async function GET(request: NextRequest) {
   try {
-    await connectToDatabase()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     // Get categories
     const categories = await BlogCategory.find().sort({ name: 1 }).lean()

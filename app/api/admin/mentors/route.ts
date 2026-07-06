@@ -1,4 +1,4 @@
-import { connectDB } from "@/lib/db"
+import { connectDBOr503 } from "@/lib/db"
 import { NextResponse } from 'next/server';
 import Mentor from '@/models/Mentor';
 import { getAdminFromSession } from '@/lib/auth';
@@ -7,7 +7,8 @@ import randomString from '@/lib/randomString';
 // GET /api/admin/mentors
 export async function GET() {
   try {
-    await connectDB()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     const admin = await getAdminFromSession();
     if (!admin) {
@@ -28,7 +29,8 @@ export async function GET() {
 // POST /api/admin/mentors
 export async function POST(request: Request) {
   try {
-    await connectDB()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     const admin = await getAdminFromSession();
     if (!admin) {

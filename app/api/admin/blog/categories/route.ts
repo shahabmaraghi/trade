@@ -1,4 +1,4 @@
-import { connectToDatabase } from "@/lib/db"
+import { connectDBOr503 } from "@/lib/db"
 import { BlogCategory } from "@/models/BlogCategory"
 import { type NextRequest, NextResponse } from "next/server"
 import { isAuthenticated, isAdmin } from "@/lib/access-control"
@@ -6,7 +6,8 @@ import { isAuthenticated, isAdmin } from "@/lib/access-control"
 // GET all categories
 export async function GET(request: NextRequest) {
   try {
-    await connectToDatabase()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     // Get query parameters for pagination and filtering
     const searchParams = request.nextUrl.searchParams
@@ -55,7 +56,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Forbidden: Admin access required" }, { status: 403 })
     }
 
-    await connectToDatabase()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     const data = await request.json()
 

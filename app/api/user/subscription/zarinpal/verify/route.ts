@@ -1,4 +1,4 @@
-import { connectDB } from "@/lib/db"
+import { connectDBOr503 } from "@/lib/db"
 import { type NextRequest, NextResponse } from "next/server"
 import { SubscriptionPlan, SubscriptionTransaction } from "@/models"
 import { getCurrentUser } from "@/lib/auth"
@@ -15,7 +15,8 @@ const MERCHANT_ID = process.env.ZARINPAL_MERCHANT_ID || "xxxxxxxx-xxxx-xxxx-xxxx
 
 export async function POST(req: NextRequest) {
   try {
-    await connectDB()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     const userData = await getCurrentUser()
     if (!userData) {

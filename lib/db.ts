@@ -76,7 +76,29 @@ export async function connectDB(): Promise<void> {
   }
 }
 
+export async function connectDBOr503(): Promise<Response | null> {
+  try {
+    await connectDB()
+    return null
+  } catch (error) {
+    const detail = error instanceof Error ? error.message : String(error)
+    console.error("Database connection failed:", detail)
+    return Response.json(
+      {
+        error: "Database unavailable",
+        detail,
+        hint:
+          detail === "MONGODB_URI is not configured"
+            ? "Set MONGODB_URI in Liara environment variables"
+            : "Check MongoDB connection string and private network",
+      },
+      { status: 503 },
+    )
+  }
+}
+
 export const connectToDatabase: () => Promise<void> = connectDB
+export const connectToDatabaseOr503 = connectDBOr503
 
 export async function disconnectDB(): Promise<void> {
   if (typeof window !== "undefined") {

@@ -1,4 +1,4 @@
-import { connectToDatabase } from "@/lib/db"
+import { connectDBOr503 } from "@/lib/db"
 import { BlogPost } from "@/models/BlogPost"
 import { type NextRequest, NextResponse } from "next/server"
 import { isAuthenticated, isAdmin } from "@/lib/access-control"
@@ -8,7 +8,8 @@ import { deleteFileFromS3, isS3Url, extractFileKeyFromUrl } from "@/lib/s3"
 // GET a specific post by ID
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    await connectToDatabase()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     const { id } = await params
 
@@ -39,7 +40,8 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    await connectToDatabase()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     const { id } = await params
     const data = await request.json()
@@ -118,7 +120,8 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    await connectToDatabase()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     const { id } = await params
 

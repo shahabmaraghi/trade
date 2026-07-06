@@ -1,4 +1,4 @@
-import { connectDB } from "@/lib/db"
+import { connectDBOr503 } from "@/lib/db"
 import { NextResponse } from "next/server"
 import { User, SubscriptionPlan } from "@/models"
 import { authMiddleware } from "@/lib/auth"
@@ -6,7 +6,8 @@ import { authMiddleware } from "@/lib/auth"
 // GET a specific user
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    await connectDB()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     const { user, isAuthorized } = await authMiddleware(request as any, "admin")
 
@@ -34,7 +35,8 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 // UPDATE a user
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    await connectDB()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     const { user, isAuthorized } = await authMiddleware(request as any, "admin")
 
@@ -91,7 +93,8 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
 // DELETE a user
 export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    await connectDB()
+    const dbError = await connectDBOr503()
+    if (dbError) return dbError
 
     const { user, isAuthorized } = await authMiddleware(request as any, "admin")
 
