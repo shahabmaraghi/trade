@@ -85,8 +85,13 @@ export async function connectDB(): Promise<void> {
     }
   }
 
+  if (!process.env.MONGODB_URI) {
+    console.error("MONGODB_URI is not set")
+    throw new Error("MONGODB_URI is not configured")
+  }
+
   try {
-    const db = await mongooseInstance.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/TChart")
+    const db = await mongooseInstance.connect(process.env.MONGODB_URI)
     connection.isConnected = db.connections[0].readyState === 1
     console.log(`MongoDB Connected: ${db.connection.host}`)
   } catch (error) {
