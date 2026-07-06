@@ -21,13 +21,14 @@ jobs:
       - name: install-liara-cli
         run: npm i -g @liara/cli@9 --registry=https://registry.npmjs.org
 
-      - name: update-liara
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Deploy to Liara
         env:
           LIARA_TOKEN: ${{ secrets.LIARA_API_TOKEN }}
           CI: true
-          npm_config_registry: https://package-mirror.liara.ir/repository/npm/
         run: |
-          pnpm install --frozen-lockfile
           liara deploy \
             --app="hirmandtrade-web" \
             --api-token="$LIARA_TOKEN" \
