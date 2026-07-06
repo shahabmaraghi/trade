@@ -62,10 +62,15 @@ export async function connectDB(): Promise<void> {
   }
 
   if (!cached.promise) {
-    cached.promise = mongooseInstance.connect(mongoUri).then((instance) => {
-      console.log(`MongoDB Connected: ${instance.connection.host}`)
-      return instance
-    })
+    cached.promise = mongooseInstance
+      .connect(mongoUri, {
+        serverSelectionTimeoutMS: 10000,
+        family: 4,
+      })
+      .then((instance) => {
+        console.log(`MongoDB Connected: ${instance.connection.host}`)
+        return instance
+      })
   }
 
   try {

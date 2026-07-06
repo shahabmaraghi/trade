@@ -1,10 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "standalone",
   serverExternalPackages: ["mongoose", "mongodb", "bson"],
-  outputFileTracingIncludes: {
-    "/*": ["./node_modules/mongoose/**/*", "./node_modules/mongodb/**/*", "./node_modules/bson/**/*"],
-  },
   webpack: (config) => {
     config.experiments = {
       ...config.experiments,
