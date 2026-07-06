@@ -3,11 +3,6 @@ node_modules/
 .pnp
 .pnp.js
 
-# npm lockfile is intentionally NOT used; Liara deploys with pnpm (pnpm-lock.yaml).
-# Committing package-lock.json makes Liara run `npm ci`, which fails on its builder.
-package-lock.json
-.pnpmfile.cjs
-
 # next.js
 .next/
 out/
@@ -31,9 +26,6 @@ npm-debug.log*
 yarn-debug.log*
 pnpm-debug.log*
 yarn-error.log*
-
-# local mongodb data
-.mongodb/
 
 # runtime
 *.pid

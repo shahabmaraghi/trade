@@ -114,8 +114,8 @@ export default function UserSidebar() {
     },
     {
       title: "ورود به پنل ادمین",
-      href: user?.role === "admin" ? "/admin/dashboard" : "/admin/login",
-      icon: <ShieldCheck className="h-5 w-5 ml-2" />,
+      href: "/admin/dashboard",
+     icon: <ShieldCheck className="h-5 w-5 ml-2" />,
     },
   ];
 

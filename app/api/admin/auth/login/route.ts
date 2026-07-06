@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
       },
     })
 
-    applyAuthCookie(response, token)
+    applyAuthCookie(response, token, req.headers.get("host") ?? undefined)
 
     return response
   } catch (error) {

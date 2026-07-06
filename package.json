@@ -3,18 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3200",
-    "dev:local": "concurrently -k -n mongo,next -c blue,green \"npm run mongo:dev\" \"npm run dev\"",
-    "mongo:dev": "node scripts/mongo-dev.mjs",
-    "mongo:verify": "node scripts/verify-mongo.mjs",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "lockfile:update": "node scripts/update-pnpm-lock.mjs"
+    "lint": "next lint"
   },
   "dependencies": {
-    "@ai-sdk/openai": "^4.0.0",
-    "@ai-sdk/react": "^4.0.0",
+    "@ai-sdk/openai": "^1.3.23",
+    "@ai-sdk/react": "^1.2.12",
     "@ant-design/icons": "^6.2.2",
     "@aws-sdk/client-s3": "latest",
     "@aws-sdk/s3-request-presigner": "latest",
@@ -69,7 +65,7 @@
     "@tiptap/pm": "latest",
     "@tiptap/react": "latest",
     "@tiptap/starter-kit": "latest",
-    "ai": "^7.0.0",
+    "ai": "^4.3.17",
     "antd": "^6.3.7",
     "autoprefixer": "^10.4.20",
     "axios": "^1.16.0",
@@ -90,10 +86,9 @@
     "lucide-react": "^0.454.0",
     "moment-jalaali": "^0.10.4",
     "mongoose": "^8.23.1",
-    "next": "^16.2.10",
+    "next": "16.2.5",
     "next-themes": "^0.4.6",
     "nextjs-toploader": "^3.9.17",
-    "pnpm": "^10.34.4",
     "react": "19.2.6",
     "react-cookie": "^8.1.2",
     "react-date-object": "^2.1.9",
@@ -104,7 +99,7 @@
     "react-multi-date-picker": "^4.5.2",
     "react-resizable-panels": "^4.11.0",
     "react-select": "latest",
-    "recharts": "^3.0.0",
+    "recharts": "latest",
     "sonner": "latest",
     "styled-components": "latest",
     "swiper": "latest",
@@ -123,14 +118,15 @@
     "@types/node": "^22.16.5",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
-    "concurrently": "^9.2.1",
     "postcss": "^8",
     "tailwindcss": "^3.4.17",
     "typescript": "^5"
   },
-  "config": {
-    "mongodbMemoryServer": {
-      "disablePostinstall": "1"
+  "packageManager": "pnpm@10.11.0+sha512.6540583f41cc5f628eb3d9773ecee802f4f9ef9923cc45b69890fb47991d4b092964694ec3a4f738a420c918a333062c8b925d312f42e4f0c263eb603551f977",
+  "pnpm": {
+    "overrides": {
+      "@types/react": "19.2.14",
+      "@types/react-dom": "19.2.3"
     }
   }
 }

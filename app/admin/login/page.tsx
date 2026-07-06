@@ -20,7 +20,7 @@ import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
 
 export default function LoginPage() {
-  const { login, isLoading, user } = useAuth();
+  const { login, isLoading } = useAuth();
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -29,12 +29,6 @@ export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const from = searchParams.get("from") || "/admin/dashboard";
-
-  useEffect(() => {
-    if (!isLoading && user?.role === "admin") {
-      router.replace(from);
-    }
-  }, [isLoading, user, from, router]);
 
   // Check if the user might be an admin based on phone number pattern
   // This is just a UI enhancement - actual role check happens on the server
@@ -86,15 +80,6 @@ export default function LoginPage() {
       .replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d)))
       .replace(/[٠-٩]/g, (d) => String("٠١٢٣٤٥٦٧٨٩".indexOf(d)));
   };
-
-  if (isLoading || user?.role === "admin") {
-    return (
-      <div className="flex items-center justify-center min-h-screen p-4">
-        <p className="text-muted-foreground">در حال انتقال به پنل مدیریت...</p>
-      </div>
-    );
-  }
-
   return (
     <div className="flex items-center justify-center min-h-screen p-4">
       <Card className="w-full max-w-md">

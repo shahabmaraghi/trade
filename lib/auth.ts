@@ -1,5 +1,4 @@
 import { jwtVerify, SignJWT } from "jose"
-import { serialize } from "cookie"
 import { cookies } from "next/headers"
 import type { NextResponse } from "next/server"
 
@@ -16,72 +15,6 @@ export interface TokenData {
   subscriptionExpiry?: string
   hasActiveSubscription: boolean
   exp?: number // Added expiration time field
-}
-
-function getAuthCookieDomain(): string | undefined {
-  // Only pin the cookie domain in production; on localhost a domain like
-  // ".hirmandtrade.ir" would make the browser reject the cookie entirely.
-  if (process.env.NODE_ENV !== "production") return undefined
-
-  const domain = process.env.NEXT_PUBLIC_COOKIE_DOMAIN?.trim()
-  if (!domain) return undefined
-
-  return domain.replace(/^https?:\/\//, "").replace(/\/$/, "")
-}
-
-export function getAuthCookieOptions() {
-  const options: {
-    httpOnly: boolean
-    path: string
-    secure: boolean
-    maxAge: number
-    sameSite: "lax"
-    domain?: string
-  } = {
-    httpOnly: true,
-    path: "/",
-    secure: process.env.NODE_ENV === "production",
-    maxAge: 60 * 60 * 24 * 7,
-    sameSite: "lax",
-  }
-
-  const domain = getAuthCookieDomain()
-  if (domain) {
-    options.domain = domain
-  }
-
-  return options
-}
-
-/** Set auth cookie on a NextResponse (preferred in API routes). */
-export function applyAuthCookie(response: NextResponse, token: string): NextResponse {
-  response.cookies.set({
-    name: "auth_token",
-    value: token,
-    ...getAuthCookieOptions(),
-  })
-
-  return response
-}
-
-/** Clear auth cookie on a NextResponse. */
-export function clearAuthCookie(response: NextResponse): NextResponse {
-  // Clear the host-only cookie (covers localhost and cookies set without a domain)
-  response.cookies.delete({ name: "auth_token", path: "/" })
-
-  // Also clear the domain-wide cookie variant if one is configured (production)
-  const domain = getAuthCookieDomain()
-  if (domain) {
-    response.cookies.set({
-      name: "auth_token",
-      value: "",
-      path: "/",
-      domain,
-      maxAge: 0,
-    })
-  }
-
-  return response
 }
 
 export async function signToken(payload: TokenData): Promise<string> {
@@ -108,15 +41,62 @@ export async function signToken(payload: TokenData): Promise<string> {
   }
 }
 
-// Function to create the auth cookie string (legacy — prefer applyAuthCookie)
-export function setAuthCookie(token: string) {
-  const { maxAge, ...options } = getAuthCookieOptions()
-  const cookie = serialize("auth_token", token, {
-    ...options,
-    maxAge,
+const AUTH_COOKIE_NAME = "auth_token"
+const AUTH_COOKIE_MAX_AGE = 60 * 60 * 24 * 7 // 7 days
+
+function resolveAuthCookieDomain(host?: string): string | undefined {
+  if (process.env.NODE_ENV !== "production") {
+    return undefined
+  }
+
+  const configured = process.env.NEXT_PUBLIC_COOKIE_DOMAIN?.trim()
+  if (configured && configured !== "undefined" && configured !== "null") {
+    return configured.startsWith(".") ? configured : `.${configured}`
+  }
+
+  const hostname = host?.split(":")[0]
+  if (hostname?.endsWith("hirmandtrade.ir")) {
+    return ".hirmandtrade.ir"
+  }
+
+  return undefined
+}
+
+export function getAuthCookieOptions(token: string, host?: string) {
+  const domain = resolveAuthCookieDomain(host)
+
+  return {
+    name: AUTH_COOKIE_NAME,
+    value: token,
+    httpOnly: true,
+    path: "/",
+    secure: process.env.NODE_ENV === "production",
+    maxAge: AUTH_COOKIE_MAX_AGE,
+    sameSite: "lax" as const,
+    ...(domain ? { domain } : {}),
+  }
+}
+
+export function applyAuthCookie(response: NextResponse, token: string, host?: string) {
+  response.cookies.set(getAuthCookieOptions(token, host))
+  return response
+}
+
+export function clearAuthCookie(response: NextResponse, host?: string) {
+  const domain = resolveAuthCookieDomain(host)
+
+  response.cookies.set({
+    name: AUTH_COOKIE_NAME,
+    value: "",
+    httpOnly: true,
+    path: "/",
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 0,
+    sameSite: "lax",
+    ...(domain ? { domain } : {}),
   })
 
-  return cookie
+  return response
 }
 
 export async function verifyToken(token: string): Promise<TokenData | null> {
@@ -135,22 +115,6 @@ export async function verifyToken(token: string): Promise<TokenData | null> {
       ...payload,
       _id: new ObjectId(payload.id),
     } as TokenData
-  } catch {
-    return null
-  }
-}
-
-/** Edge-safe JWT verification for middleware/proxy (no bson dependency). */
-export async function verifyTokenPayload(token: string): Promise<TokenData | null> {
-  try {
-    const { payload } = await jwtVerify<TokenData>(token, JWT_SECRET)
-
-    const currentTime = Math.floor(Date.now() / 1000)
-    if (payload.exp && payload.exp < currentTime) {
-      return null
-    }
-
-    return payload as TokenData
   } catch {
     return null
   }

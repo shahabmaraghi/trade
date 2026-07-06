@@ -110,13 +110,11 @@ export default function VerifyOTPForm() {
 
       // Check if user exists
       if (data.userExists) {
-        safeStorage.removeItem("auth_phone", "session")
-        const destination =
-          data.user?.role === "admin" ? "/admin/dashboard" : "/user"
-        window.location.assign(destination)
+        // Full navigation ensures the auth cookie is sent on the next request
+        window.location.assign("/user")
       } else {
         // User doesn't exist, redirect to registration
-        window.location.assign("/auth/register")
+        router.push("/auth/register")
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "خطایی رخ داد")

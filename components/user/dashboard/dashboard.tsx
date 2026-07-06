@@ -47,7 +47,7 @@ export default function UserDashboard() {
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      router.push("/auth/login")
+      router.push("/")
     }
   }, [isLoading, isAuthenticated, router])
 

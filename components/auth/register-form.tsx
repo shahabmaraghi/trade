@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, ChevronDown, ChevronUp } from "lucide-react";
+import { useAuth } from "@/components/auth/AuthProvider";
 import { safeStorage } from "@/lib/storage";
 import { Eye, EyeOff } from "lucide-react";
 export default function RegisterForm() {
@@ -20,6 +21,7 @@ export default function RegisterForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const { refreshUser } = useAuth();
   const [showUserRef, setShowUserRef] = useState(false);
   const [showMentorRef, setShowMentorRef] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -81,12 +83,16 @@ export default function RegisterForm() {
         throw new Error(data.error || "خطا در ثبت نام");
       }
 
+      // Refresh user data in auth context
+      await refreshUser();
+
       // Clear session storage and referral code
       safeStorage.removeItem("auth_phone", "session");
       safeStorage.removeItem("referral_code", "local");
       safeStorage.removeItem("mentor_referral_code", "local");
 
-      window.location.assign("/user");
+      // Redirect to user dashboard
+      window.location.assign("/user")
     } catch (err) {
       setError(err instanceof Error ? err.message : "خطایی رخ داد");
     } finally {

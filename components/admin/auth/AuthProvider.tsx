@@ -41,9 +41,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await fetch("/api/admin/auth/me", {
-          credentials: "include",
-        })
+        const response = await fetch("/api/admin/auth/me")
         if (response.ok) {
           const userData = await response.json()
           setUser(userData)
