@@ -24,11 +24,9 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Standalone + pnpm can miss mongoose at runtime; install native deps into the image
-USER root
-RUN npm install mongoose@8.23.1 --omit=dev --no-save --no-package-lock \
-  && chown -R nextjs:nodejs /app/node_modules
-USER nextjs
+# Standalone trace can miss pnpm-linked packages; reuse builder node_modules for runtime
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
 
+USER nextjs
 EXPOSE 3000
 CMD ["node", "server.js"]
