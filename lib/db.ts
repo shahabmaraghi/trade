@@ -1,88 +1,104 @@
-/**
- * Database connection state
- */
-interface ConnectionState {
-  isConnected: boolean
+interface MongooseCache {
+  conn: typeof import("mongoose") | null
+  promise: Promise<typeof import("mongoose")> | null
 }
 
-/**
- * Track connection state
- */
-const connection: ConnectionState = {
-  isConnected: false,
+declare global {
+  // eslint-disable-next-line no-var
+  var _mongooseCache: MongooseCache | undefined
 }
 
-let mongoose: typeof import('mongoose') | null = null;
-let isInitialized = false;
+let mongoose: typeof import("mongoose") | null = null
+let isInitialized = false
+let isPatched = false
 
-/**
- * Initialize mongoose (server-side only)
- */
-async function initMongoose() {
-  if (typeof window !== 'undefined') {
-    // Client-side - return null or mock
-    return null;
+function getCache(): MongooseCache {
+  if (!global._mongooseCache) {
+    global._mongooseCache = { conn: null, promise: null }
   }
-  
+  return global._mongooseCache
+}
+
+function patchMongooseForAutoConnect(mongooseInstance: typeof import("mongoose")) {
+  if (isPatched) {
+    return
+  }
+
+  isPatched = true
+
+  async function withDb<T>(operation: () => Promise<T>): Promise<T> {
+    await connectDB()
+    return operation()
+  }
+
+  const originalQueryExec = mongooseInstance.Query.prototype.exec
+  mongooseInstance.Query.prototype.exec = function (...args) {
+    return withDb(() => originalQueryExec.apply(this, args))
+  }
+
+  const originalAggregateExec = mongooseInstance.Aggregate.prototype.exec
+  mongooseInstance.Aggregate.prototype.exec = function (...args) {
+    return withDb(() => originalAggregateExec.apply(this, args))
+  }
+
+  const originalDocumentSave = mongooseInstance.Document.prototype.save
+  mongooseInstance.Document.prototype.save = function (...args) {
+    return withDb(() => originalDocumentSave.apply(this, args))
+  }
+
+  const originalModelCreate = mongooseInstance.Model.create
+  mongooseInstance.Model.create = function (...args) {
+    return withDb(() => originalModelCreate.apply(this, args))
+  }
+
+  const originalInsertMany = mongooseInstance.Model.insertMany
+  mongooseInstance.Model.insertMany = function (...args) {
+    return withDb(() => originalInsertMany.apply(this, args))
+  }
+}
+
+async function initMongoose() {
+  if (typeof window !== "undefined") {
+    return null
+  }
+
   if (!mongoose && !isInitialized) {
-    isInitialized = true;
+    isInitialized = true
     try {
-      // Dynamic import for server-side only
-      mongoose = await import('mongoose');
-      
-      // Set up emitWarning if needed
+      mongoose = await import("mongoose")
+
       if (typeof process.emitWarning !== "function") {
-        process.emitWarning = (warning: string | Error, ...args: any[]) => {
+        process.emitWarning = (warning: string | Error, ...args: unknown[]) => {
           console.warn(warning, ...args)
         }
       }
-      
-      // Set mongoose options
-      mongoose.set("strictQuery", true);
+
+      mongoose.set("strictQuery", true)
+      patchMongooseForAutoConnect(mongoose)
     } catch (error) {
-      console.error("Failed to import mongoose:", error);
+      console.error("Failed to import mongoose:", error)
     }
   }
-  return mongoose;
+
+  return mongoose
 }
 
-/**
- * Connect to MongoDB (server-side only)
- */
 export async function connectDB(): Promise<void> {
-  // Don't attempt to connect on client side
-  if (typeof window !== 'undefined') {
-    return;
+  if (typeof window !== "undefined") {
+    return
   }
 
-  // Check if we are in build/prerendering environment
-  const isBuildTime = process.env.NODE_ENV === 'production' && process.env.NEXT_PHASE === 'phase-production-build';
-  
+  const isBuildTime =
+    process.env.NODE_ENV === "production" &&
+    process.env.NEXT_PHASE === "phase-production-build"
+
   if (isBuildTime) {
-    console.log("Skipping MongoDB connection during build phase")
     return
   }
 
-  // Check if we're already connected
-  if (connection.isConnected) {
-    console.log("Already connected to MongoDB")
+  const cached = getCache()
+  if (cached.conn?.connection.readyState === 1) {
     return
-  }
-
-  // Initialize mongoose
-  const mongooseInstance = await initMongoose();
-  if (!mongooseInstance) {
-    console.log("Mongoose not available (client-side or failed to import)")
-    return;
-  }
-
-  // Check if we have a cached connection
-  if (mongooseInstance.connections.length > 0) {
-    connection.isConnected = mongooseInstance.connections[0].readyState === 1
-    if (connection.isConnected) {
-      console.log("Using existing MongoDB connection")
-      return
-    }
   }
 
   if (!process.env.MONGODB_URI) {
@@ -90,11 +106,22 @@ export async function connectDB(): Promise<void> {
     throw new Error("MONGODB_URI is not configured")
   }
 
+  const mongooseInstance = await initMongoose()
+  if (!mongooseInstance) {
+    return
+  }
+
+  if (!cached.promise) {
+    cached.promise = mongooseInstance.connect(process.env.MONGODB_URI).then((instance) => {
+      console.log(`MongoDB Connected: ${instance.connection.host}`)
+      return instance
+    })
+  }
+
   try {
-    const db = await mongooseInstance.connect(process.env.MONGODB_URI)
-    connection.isConnected = db.connections[0].readyState === 1
-    console.log(`MongoDB Connected: ${db.connection.host}`)
+    cached.conn = await cached.promise
   } catch (error) {
+    cached.promise = null
     console.error("Error connecting to MongoDB:", error)
     throw error
   }
@@ -102,34 +129,28 @@ export async function connectDB(): Promise<void> {
 
 export const connectToDatabase: () => Promise<void> = connectDB
 
-/**
- * Disconnect from MongoDB (server-side only)
- */
 export async function disconnectDB(): Promise<void> {
-  if (typeof window !== 'undefined') {
-    return;
-  }
-
-  if (!connection.isConnected) {
+  if (typeof window !== "undefined") {
     return
   }
 
-  const mongooseInstance = await initMongoose();
-  if (!mongooseInstance) {
-    return;
+  const cached = getCache()
+  if (!cached.conn) {
+    return
   }
 
-  // Only disconnect in production to avoid connection overhead in development
   if (process.env.NODE_ENV === "production") {
-    await mongooseInstance.disconnect()
-    connection.isConnected = false
+    await cached.conn.disconnect()
+    cached.conn = null
+    cached.promise = null
     console.log("Disconnected from MongoDB")
   }
 }
 
-/**
- * Get mongoose instance (server-side only)
- */
 export async function getMongoose() {
-  return initMongoose();
+  return initMongoose()
+}
+
+if (typeof window === "undefined") {
+  void initMongoose()
 }

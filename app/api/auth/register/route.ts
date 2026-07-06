@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from "next/server"
 import { User, SubscriptionPlan } from "@/models"
 import { signToken, applyAuthCookie, type TokenData } from "@/lib/auth"
 import randomString from "@/lib/randomString"
+import { connectDB } from "@/lib/db"
 
 // Helper function to calculate expiry date
 function calculateExpiryDate(days: number, hours: number): Date {
@@ -14,6 +15,8 @@ function calculateExpiryDate(days: number, hours: number): Date {
 
 export async function POST(req: NextRequest) {
   try {
+    await connectDB()
+
     const { phone, fullName = "", password = "", referrer = "", mentorReferrer = "" } = await req.json()
 
     // Validate phone number

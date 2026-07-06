@@ -3,6 +3,7 @@ import { OTPVerification } from "@/models/OTPVerification";
 import { User } from "@/models";
 import normalizePhonenumber from "@/lib/normalizePhonenumber";
 import sendPattern from "@/lib/sendPattern";
+import { connectDB } from "@/lib/db";
 
 // Function to generate a random 6-digit code
 function generateOTP(): string {
@@ -25,6 +26,8 @@ async function sendSMS(phone: string, code: string): Promise<boolean> {
 }
 export async function POST(req: NextRequest) {
   try {
+    await connectDB();
+
     const { phone } = await req.json();
     console.log("PHONE:", phone);
 

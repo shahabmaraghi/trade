@@ -2,9 +2,12 @@ import { type NextRequest, NextResponse } from "next/server"
 import { OTPVerification } from "@/models/OTPVerification"
 import { User } from "@/models"
 import { signToken, applyAuthCookie, type TokenData } from "@/lib/auth"
+import { connectDB } from "@/lib/db"
 
 export async function POST(req: NextRequest) {
   try {
+    await connectDB()
+
     const { phone, code } = await req.json()
 
     // Validate phone number and code

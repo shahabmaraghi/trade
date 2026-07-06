@@ -13,8 +13,8 @@ interface SendSimpleSmsResponse {
     const apiKey = process.env.SMS_API_KEY?.trim();
     const lineNumber = process.env.SMS_LINE_NUMBER?.trim();
     const apiUrl = process.env.SMS_API_URL?.trim();
-    const patternCode = process.env.SMS_PATTERN_CODE?.trim();
-    if (!apiKey || !lineNumber || !apiUrl || !patternCode) {
+    const resolvedPatternCode = process.env.SMS_PATTERN_CODE?.trim() || patternCode;
+    if (!apiKey || !lineNumber || !apiUrl || !resolvedPatternCode) {
       console.error("SMS ENV VARIABLES ARE MISSING");
       return false;
     }
@@ -27,7 +27,7 @@ interface SendSimpleSmsResponse {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        code: patternCode,
+        code: resolvedPatternCode,
         recipient: phoneNumber,
         line_number: lineNumber,
         attributes: patternVariables,
@@ -37,7 +37,11 @@ interface SendSimpleSmsResponse {
 
     console.log("STATUS:", response.status);
     const text = await response.text();
-    console.log("BODY RESPONSE:", JSON.parse(text));
+    try {
+      console.log("BODY RESPONSE:", JSON.parse(text));
+    } catch {
+      console.log("BODY RESPONSE:", text);
+    }
 
     return response.ok;
   } catch (error) {

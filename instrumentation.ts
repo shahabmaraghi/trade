@@ -1,7 +1,10 @@
 export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
     try {
-      const { connectDB } = await import("./lib/db")
+      const { getMongoose, connectDB } = await import("./lib/db")
+
+      // Patch mongoose and connect before handling API requests
+      await getMongoose()
 
       // Dynamically import all Mongoose models
       await import("./models/User")

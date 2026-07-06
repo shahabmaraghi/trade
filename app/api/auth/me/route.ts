@@ -2,9 +2,12 @@ import { type NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { User } from "@/models/User"
 import { verifyToken } from "@/lib/auth"
+import { connectDB } from "@/lib/db"
 
 export async function GET(request: NextRequest) {
   try {
+    await connectDB()
+
     // Get token from cookies
     const cookieStore = await cookies()
     const token = cookieStore.get("auth_token")?.value
