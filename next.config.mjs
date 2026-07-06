@@ -2,6 +2,16 @@
 const nextConfig = {
   output: "standalone",
   serverExternalPackages: ["mongoose", "mongodb", "bson"],
+  outputFileTracingIncludes: {
+    "/*": ["./node_modules/mongoose/**/*", "./node_modules/mongodb/**/*", "./node_modules/bson/**/*"],
+  },
+  webpack: (config) => {
+    config.experiments = {
+      ...config.experiments,
+      topLevelAwait: true,
+    }
+    return config
+  },
   turbopack: (config, { isServer }) => {
     // Exclude MongoDB from client-side bundles
     if (!isServer) {

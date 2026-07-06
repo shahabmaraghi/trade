@@ -1,6 +1,8 @@
+import mongoose from "mongoose"
+
 interface MongooseCache {
-  conn: typeof import("mongoose") | null
-  promise: Promise<typeof import("mongoose")> | null
+  conn: typeof mongoose | null
+  promise: Promise<typeof mongoose> | null
 }
 
 declare global {
@@ -15,12 +17,10 @@ function getCache(): MongooseCache {
   return global._mongooseCache
 }
 
-async function getMongooseModule() {
+function getMongooseModule() {
   if (typeof window !== "undefined") {
     return null
   }
-
-  const mongoose = await import("mongoose")
 
   if (typeof process.emitWarning !== "function") {
     process.emitWarning = (warning: string | Error, ...args: unknown[]) => {
@@ -50,18 +50,19 @@ export async function connectDB(): Promise<void> {
     return
   }
 
-  if (!process.env.MONGODB_URI?.trim()) {
+  const mongoUri = process.env.MONGODB_URI?.trim()
+  if (!mongoUri) {
     console.error("MONGODB_URI is not set")
     throw new Error("MONGODB_URI is not configured")
   }
 
-  const mongoose = await getMongooseModule()
-  if (!mongoose) {
+  const mongooseInstance = getMongooseModule()
+  if (!mongooseInstance) {
     throw new Error("Mongoose is not available on the server")
   }
 
   if (!cached.promise) {
-    cached.promise = mongoose.connect(process.env.MONGODB_URI).then((instance) => {
+    cached.promise = mongooseInstance.connect(mongoUri).then((instance) => {
       console.log(`MongoDB Connected: ${instance.connection.host}`)
       return instance
     })
